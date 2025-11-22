@@ -15,9 +15,9 @@ app.use(cors());
 const allowedOrigin = process.env.NODEJS_BACKEND_URL;
 
 app.use(cors({
-  origin: allowedOrigin, // only requests from this URL are allowed
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // allowed HTTP methods
-  credentials: true, // if you need cookies/auth headers
+  origin: allowedOrigin,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true,
 }));
 
 // Routes
