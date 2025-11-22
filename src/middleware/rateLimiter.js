@@ -1,5 +1,6 @@
 const rateLimit = require("express-rate-limit");
 const { RedisStore } = require("rate-limit-redis");
+const { ipKeyGenerator } = require("express-rate-limit");
 const redisClient = require("../config/redis");
 const User = require("../models/User");
 
@@ -8,14 +9,9 @@ const loginLimiter = rateLimit({
   max: async (req, res) => {
     try {
       const user = await User.findOne({ email: req.body.email });
-
       if (!user) return 3;
-
-      if (user.role === "admin") {
-        return 0;
-      }
+      if (user.role === "admin") return 0;
       return 3;
-
     } catch (err) {
       return 3;
     }
@@ -24,9 +20,7 @@ const loginLimiter = rateLimit({
   skip: async (req, res) => {
     try {
       const user = await User.findOne({ email: req.body.email });
-
       if (user && user.role === "admin") return true;
-
       return false;
     } catch (err) {
       return false;
@@ -34,7 +28,7 @@ const loginLimiter = rateLimit({
   },
 
   keyGenerator: (req, res) => {
-    return req.body.email || req.ip;
+    return req.body.email || ipKeyGenerator(req);
   },
 
   store: new RedisStore({
