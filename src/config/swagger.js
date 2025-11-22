@@ -28,16 +28,28 @@ const swaggerDefinition = {
           name: { type: "string" },
           username: { type: "string" },
           email: { type: "string" },
-          role: { type: "string", enum: ["user","manager","admin"] }
-        }
+          role: { type: "string", enum: ["user", "manager", "admin"] }
+        },
+      },
+      Task: {
+        type: "object",
+        properties: {
+          _id: { type: "string" },
+          title: { type: "string" },
+          description: { type: "string" },
+          status: { type: "string", enum: ["pending", "in-progress", "completed"] },
+          createdAt: { type: "string", format: "date-time" },
+          updatedAt: { type: "string", format: "date-time" },
+        },
+        required: ["_id", "title", "status"],
       },
       Error: {
         type: "object",
         properties: {
           message: { type: "string" },
           error: { type: "string" }
-        }
-      }
+        },
+      },
     },
     responses: {
       UnauthorizedError: {
@@ -73,7 +85,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: [path.join(__dirname, "../routes/*.js")],
+  apis: [path.join(__dirname, "../routes/*.js")], // point to your route files
 };
 
 const swaggerSpec = swaggerJsdoc(options);
